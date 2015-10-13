@@ -37,12 +37,12 @@ build:
 	@echo "Done!"
 
 build-hawq-devel-$(OS_VERSION): $(TOP_DIR)/hawq-devel-$(OS_VERSION)/Dockerfile
-	@echo build hawq-devel-$(OS_VERSION) image
-	docker build -t mayjojo/hawq-devel-$(OS_VERSION) $(TOP_DIR)/hawq-devel-$(OS_VERSION)/
+	@echo build hawq-devel-$(OS_VERSION):devel image
+	docker build -t mayjojo/hawq-devel-$(OS_VERSION):devel $(TOP_DIR)/hawq-devel-$(OS_VERSION)/
 
 build-hawq-test-$(OS_VERSION): $(TOP_DIR)/hawq-test-$(OS_VERSION)/Dockerfile
-	@echo build hawq-test-$(OS_VERSION) image
-	docker build -t mayjojo/hawq-test-$(OS_VERSION) $(TOP_DIR)/hawq-test-$(OS_VERSION)/
+	@echo build hawq-devel-$(OS_VERSION):test image
+	docker build -t mayjojo/hawq-devel-$(OS_VERSION):test $(TOP_DIR)/hawq-test-$(OS_VERSION)/
 
 create-data-container:
 	@echo create ${CLUSTER_ID}data container
@@ -52,9 +52,9 @@ create-data-container:
 	fi
 	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}data" | grep -v CONTAINER`" ]; then \
 		if [ -z "$(LOCAL)" ]; then \
-			docker create -v /data --name=${CLUSTER_ID}data mayjojo/hawq-devel-$(OS_VERSION) /bin/true; \
+			docker create -v /data --name=${CLUSTER_ID}data mayjojo/hawq-devel-$(OS_VERSION):devel /bin/true; \
 		else \
-			docker create -v $(LOCAL):/data --name=${CLUSTER_ID}data mayjojo/hawq-devel-$(OS_VERSION) /bin/true; \
+			docker create -v $(LOCAL):/data --name=${CLUSTER_ID}data mayjojo/hawq-devel-$(OS_VERSION):devel /bin/true; \
 		fi \
 	else \
 		echo "${CLUSTER_ID}data container already exist!"; \
@@ -64,7 +64,7 @@ create-devel:
 	@make -f $(THIS_MAKEFILE_PATH) create-data-container 2>&1 >/dev/null
 	@echo create ${CLUSTER_ID}devel container
 	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}devel" | grep -v CONTAINER`" ]; then \
-		docker run -d --volumes-from ${CLUSTER_ID}data --name=${CLUSTER_ID}devel mayjojo/hawq-devel-$(OS_VERSION) tail -f /dev/null; \
+		docker run -d --volumes-from ${CLUSTER_ID}data --name=${CLUSTER_ID}devel mayjojo/hawq-devel-$(OS_VERSION):devel tail -f /dev/null; \
 	else \
 		echo "${CLUSTER_ID}devel container already exist!"; \
 	fi
@@ -86,7 +86,7 @@ run-namenode-container:
 	@echo "run ${CLUSTER_ID}namenode container"
 	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}namenode" | grep -v CONTAINER`" ]; then \
 		docker run -d --hostname=${CLUSTER_ID}namenode --name=${CLUSTER_ID}namenode \
-			--volumes-from ${CLUSTER_ID}data mayjojo/hawq-test-$(OS_VERSION) tail -f /dev/null; \
+			--volumes-from ${CLUSTER_ID}data mayjojo/hawq-devel-$(OS_VERSION):test tail -f /dev/null; \
 	else \
 		echo "${CLUSTER_ID}namenode container already exist!"; \
 	fi
@@ -96,7 +96,7 @@ run-datanode-container:
 	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}datanode$(CUR_DATANODE)" | grep -v CONTAINER`" ]; then \
 		docker run -d --hostname=${CLUSTER_ID}datanode$(CUR_DATANODE) \
 			--name=${CLUSTER_ID}datanode$(CUR_DATANODE) -e NAMENODE=${CLUSTER_ID}namenode \
-		  --volumes-from ${CLUSTER_ID}data mayjojo/hawq-test-$(OS_VERSION) tail -f /dev/null; \
+		  --volumes-from ${CLUSTER_ID}data mayjojo/hawq-devel-$(OS_VERSION):test tail -f /dev/null; \
 	else \
 		echo "${CLUSTER_ID}datanode$(CUR_DATANODE) container already exist!"; \
 	fi

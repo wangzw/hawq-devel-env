@@ -71,7 +71,7 @@ RUN mkdir -p /tmp/build && \
 RUN mkdir -p /tmp/build/ && \
  cd /tmp/build && curl -L "https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.bz2" -o protobuf-2.5.0.tar.bz2 && \
  tar -xjf protobuf-2.5.0.tar.bz2 && cd protobuf-2.5.0 && \
- ./configure --prefix=/usr && make -j8 && make install && ldconfig \
+ ./configure --prefix=/usr && make -j8 && make install && ldconfig && \
  rm -rf /tmp/build
 
 # install libhdfs3
@@ -82,7 +82,7 @@ RUN mkdir -p /tmp/build && \
 
 # install libyarn
 RUN mkdir -p /tmp/build && \
- cd /tmp/build && git clone --depth=1 https://github.com/apache/incubator-hawq.git . && cd depends && mkdir build && cd build && \
+ cd /tmp/build && git clone --depth=1 https://github.com/apache/incubator-hawq.git . && cd depends/libyarn && mkdir build && cd build && \
  ../bootstrap --prefix=/usr && make -j8 && make install && ldconfig && \
  rm -rf /tmp/build
 
