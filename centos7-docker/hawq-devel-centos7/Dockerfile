@@ -37,7 +37,7 @@ RUN echo "#!/bin/sh" > /etc/profile.d/java.sh && \
 RUN mkdir -p /tmp/build/ && \
  cd /tmp/build && curl -L https://s3.amazonaws.com/json-c_releases/releases/json-c-0.9.tar.gz -o json-c-0.9.tar.gz && \
  tar -xzf json-c-0.9.tar.gz && cd json-c-0.9 && \
- ./configure --prefix=/usr && make -j8 && make install && \
+ ./configure --prefix=/usr && make && make install && \
  rm -rf /tmp/build
 
 # install sigar 1.6.4
@@ -51,19 +51,19 @@ RUN mkdir -p /tmp/build/ && \
 RUN mkdir -p /tmp/build/ && \
  cd /tmp/build && curl -L http://downloads.sourceforge.net/project/flex/flex/flex-2.5.35/flex-2.5.35.tar.bz2 -o flex-2.5.35.tar.bz2 && \
  tar -xjf flex-2.5.35.tar.bz2 && cd flex-2.5.35 && \
- ./configure --prefix=/usr && make -j8 && make install && \
+ ./configure --prefix=/usr && make && make install && \
  rm -rf /tmp/build
 
 # install libhdfs3
 RUN mkdir -p /tmp/build && \
  cd /tmp/build && git clone https://github.com/PivotalRD/libhdfs3.git . && mkdir build && cd build && \
- ../bootstrap --prefix=/usr && make -j8 && make install && ldconfig && \
+ ../bootstrap --prefix=/usr && make && make install && ldconfig && \
  rm -rf /tmp/build
 
 # install libyarn
 RUN mkdir -p /tmp/build && \
  cd /tmp/build && git clone --depth=1 https://github.com/apache/incubator-hawq.git . && cd depends/libyarn && mkdir build && cd build && \
- ../bootstrap --prefix=/usr && make -j8 && make install && ldconfig && \
+ ../bootstrap --prefix=/usr && make && make install && ldconfig && \
  rm -rf /tmp/build
 
 ENV BASEDIR /data
