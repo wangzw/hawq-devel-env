@@ -14,13 +14,20 @@ RUN yum install -y epel-release && \
 RUN yum install -y man passwd sudo tar which git mlocate links make bzip2 \
  autoconf automake libtool m4 gcc gcc-c++ gdb flex cmake gperf indent \
  libuuid-devel krb5-devel libgsasl-devel expat-devel libxml2-devel \
- perl-ExtUtils-Embed pam-devel python-devel libcurl-devel snappy-devel \
+ perl-ExtUtils-Embed pam-devel python-devel snappy-devel \
  libyaml-devel libevent-devel bzip2-devel openssl-devel \
  openldap-devel readline-devel net-snmp-devel apr-devel \
  libesmtp-devel xerces-c-devel python-pip sigar-devel \
  apache-ivy java-1.7.0-openjdk-devel \
  openssh-clients openssh-server && \
  yum clean all
+
+# install libcurl 7.45.0
+RUN mkdir -p /tmp/build/ && \
+ cd /tmp/build && curl -L "http://curl.haxx.se/download/curl-7.45.0.tar.bz2" -o curl-7.45.0.tar.bz2 && \
+ tar -xjf curl-7.45.0.tar.bz2 && cd curl-7.45.0 && \
+ ./configure --prefix=/usr && make && make install && \
+ rm -rf /tmp/build
 
 RUN curl -L "http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo" -o /etc/yum.repos.d/epel-apache-maven.repo && \
  yum install -y apache-maven && \
