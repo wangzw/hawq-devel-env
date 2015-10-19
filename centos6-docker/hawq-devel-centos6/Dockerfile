@@ -27,7 +27,7 @@ RUN mkdir -p /tmp/build/ && \
  cd /tmp/build && curl -L "http://curl.haxx.se/download/curl-7.45.0.tar.bz2" -o curl-7.45.0.tar.bz2 && \
  tar -xjf curl-7.45.0.tar.bz2 && cd curl-7.45.0 && \
  ./configure --prefix=/usr && make && make install && \
- rm -rf /tmp/build
+ rm -rf /tmp/build && ldconfig
 
 RUN curl -L "http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo" -o /etc/yum.repos.d/epel-apache-maven.repo && \
  yum install -y apache-maven && \
