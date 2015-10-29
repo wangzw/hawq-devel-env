@@ -17,3 +17,4 @@ COPY conf/* /etc/hadoop/conf/
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["bash"]
+

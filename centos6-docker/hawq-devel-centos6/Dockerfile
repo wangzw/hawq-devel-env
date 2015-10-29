@@ -5,13 +5,10 @@ MAINTAINER Zhanwei Wang <wangzw@wangzw.org>
 # install document with yum
 RUN sed -i 's/tsflags=nodocs//g' /etc/yum.conf
 
-# install epel reporistory and upgrade basic image
-RUN yum install -y epel-release && \
- yum upgrade -y && \
- yum clean all
-
 # install all software we need
-RUN yum install -y man passwd sudo tar which git mlocate links make bzip2 \
+RUN yum install -y epel-release && \
+ yum makecache && \
+ yum install -y man passwd sudo tar which git mlocate links make bzip2 \
  autoconf automake libtool m4 gcc gcc-c++ gdb flex cmake gperf indent \
  libuuid-devel krb5-devel libgsasl-devel expat-devel libxml2-devel \
  perl-ExtUtils-Embed pam-devel python-devel snappy-devel \
@@ -97,3 +94,4 @@ ENV BASEDIR /data
 RUN mkdir -p /data
 
 WORKDIR /data
+
