@@ -39,7 +39,7 @@ build:
 build-hawq-devel-$(OS_VERSION): $(TOP_DIR)/hawq-devel-$(OS_VERSION)/Dockerfile
 	@echo build hawq-devel-$(OS_VERSION):devel image
 	docker build -t mayjojo/hawq-devel-$(OS_VERSION):devel $(TOP_DIR)/hawq-devel-$(OS_VERSION)/
-	docker tag mayjojo/hawq-devel-$(OS_VERSION):devel mayjojo/hawq-devel-$(OS_VERSION):latest
+	docker tag -f mayjojo/hawq-devel-$(OS_VERSION):devel mayjojo/hawq-devel-$(OS_VERSION):latest
 
 build-hawq-test-$(OS_VERSION): $(TOP_DIR)/hawq-test-$(OS_VERSION)/Dockerfile
 	@echo build hawq-devel-$(OS_VERSION):test image
