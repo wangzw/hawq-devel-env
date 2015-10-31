@@ -1,4 +1,4 @@
-FROM mayjojo/hawq-devel-centos6:devel
+FROM mayjojo/hawq-devel:centos6
 
 MAINTAINER Zhanwei Wang <wangzw@wangzw.org>
 
