@@ -14,7 +14,7 @@ RUN yum install -y epel-release && \
  perl-ExtUtils-Embed pam-devel python-devel snappy-devel \
  libyaml-devel libevent-devel bzip2-devel openssl-devel \
  openldap-devel readline-devel net-snmp-devel apr-devel \
- libesmtp-devel xerces-c-devel python-pip sigar-devel \
+ libesmtp-devel xerces-c-devel python-pip \
  apache-ivy java-1.7.0-openjdk-devel \
  openssh-clients openssh-server && \
  yum clean all
