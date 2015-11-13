@@ -37,13 +37,6 @@ RUN mkdir -p /tmp/build/ && \
  ./configure --prefix=/usr && make && make install && \
  rm -rf /tmp/build
 
-# install sigar 1.6.4
-RUN mkdir -p /tmp/build/ && \
- cd /tmp/build && curl -L https://github.com/hyperic/sigar/archive/sigar-1.6.4.tar.gz -o sigar-1.6.4.tar.gz && \
- tar -xzf sigar-1.6.4.tar.gz && cd sigar-sigar-1.6.4/bindings/perl && \
- perl Makefile.PL ../../ && make DEFINE="-Wall" static && cp blib/arch/auto/Sigar/Sigar.a /usr/lib/libsigar.a && cp -r ../../include/* /usr/include/ && \
- rm -rf /tmp/build
-
 # install flex 2.5.35
 RUN mkdir -p /tmp/build/ && \
  cd /tmp/build && curl -L http://downloads.sourceforge.net/project/flex/flex/flex-2.5.35/flex-2.5.35.tar.bz2 -o flex-2.5.35.tar.bz2 && \
