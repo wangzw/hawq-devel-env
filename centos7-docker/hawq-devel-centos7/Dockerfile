@@ -5,6 +5,9 @@ MAINTAINER Zhanwei Wang <wangzw@wangzw.org>
 # install document with yum
 RUN sed -i 's/tsflags=nodocs//g' /etc/yum.conf
 
+# add yum repo
+RUN curl -L "https://bintray.com/wangzw/rpm/rpm" -o /etc/yum.repos.d/bintray-wangzw-rpm.repo
+
 # install all software we need
 RUN yum install -y epel-release && \
  yum makecache && \
@@ -14,7 +17,7 @@ RUN yum install -y epel-release && \
  perl-ExtUtils-Embed pam-devel python-devel libcurl-devel snappy-devel \
  thrift-devel libyaml-devel libevent-devel bzip2-devel openssl-devel \
  openldap-devel protobuf-devel readline-devel net-snmp-devel apr-devel \
- libesmtp-devel xerces-c-devel python-pip \
+ libesmtp-devel xerces-c-devel python-pip json-c-devel libhdfs3-devel \
  apache-ivy java-1.7.0-openjdk-devel \
  openssh-clients openssh-server && \
  yum clean all
@@ -30,24 +33,11 @@ RUN echo "#!/bin/sh" > /etc/profile.d/java.sh && \
  echo "export JAVA_HOME=/etc/alternatives/java_sdk" >> /etc/profile.d/java.sh && \
  chmod a+x /etc/profile.d/java.sh
 
-# install json-c 0.9
-RUN mkdir -p /tmp/build/ && \
- cd /tmp/build && curl -L https://s3.amazonaws.com/json-c_releases/releases/json-c-0.9.tar.gz -o json-c-0.9.tar.gz && \
- tar -xzf json-c-0.9.tar.gz && cd json-c-0.9 && \
- ./configure --prefix=/usr && make && make install && \
- rm -rf /tmp/build
-
 # install flex 2.5.35
 RUN mkdir -p /tmp/build/ && \
  cd /tmp/build && curl -L http://downloads.sourceforge.net/project/flex/flex/flex-2.5.35/flex-2.5.35.tar.bz2 -o flex-2.5.35.tar.bz2 && \
  tar -xjf flex-2.5.35.tar.bz2 && cd flex-2.5.35 && \
  ./configure --prefix=/usr && make && make install && \
- rm -rf /tmp/build
-
-# install libhdfs3
-RUN mkdir -p /tmp/build && \
- cd /tmp/build && git clone https://github.com/PivotalRD/libhdfs3.git . && mkdir build && cd build && \
- ../bootstrap --prefix=/usr && make && make install && ldconfig && \
  rm -rf /tmp/build
 
 # install libyarn
@@ -57,7 +47,7 @@ RUN mkdir -p /tmp/build && \
  rm -rf /tmp/build
 
 ENV BASEDIR /data
-RUN mkdir -p /data
+RUN mkdir -p /data && chmod 777 /data
 
 WORKDIR /data
 
