@@ -12,7 +12,7 @@ RUN curl -L "https://bintray.com/wangzw/rpm/rpm" -o /etc/yum.repos.d/bintray-wan
 RUN yum install -y epel-release && \
  yum makecache && \
  yum install -y man passwd sudo tar which git mlocate links make bzip2 \
- autoconf automake libtool m4 gcc gcc-c++ gdb bison cmake gperf maven indent \
+ autoconf automake libtool m4 gcc gcc-c++ gdb bison flex cmake gperf maven indent \
  libuuid-devel krb5-devel libgsasl-devel expat-devel libxml2-devel \
  perl-ExtUtils-Embed pam-devel python-devel libcurl-devel snappy-devel \
  thrift-devel libyaml-devel libevent-devel bzip2-devel openssl-devel \
@@ -32,13 +32,6 @@ RUN sshd-keygen && \
 RUN echo "#!/bin/sh" > /etc/profile.d/java.sh && \
  echo "export JAVA_HOME=/etc/alternatives/java_sdk" >> /etc/profile.d/java.sh && \
  chmod a+x /etc/profile.d/java.sh
-
-# install flex 2.5.35
-RUN mkdir -p /tmp/build/ && \
- cd /tmp/build && curl -L http://downloads.sourceforge.net/project/flex/flex/flex-2.5.35/flex-2.5.35.tar.bz2 -o flex-2.5.35.tar.bz2 && \
- tar -xjf flex-2.5.35.tar.bz2 && cd flex-2.5.35 && \
- ./configure --prefix=/usr && make && make install && \
- rm -rf /tmp/build
 
 # install libyarn
 RUN mkdir -p /tmp/build && \
