@@ -39,8 +39,22 @@ RUN mkdir -p /tmp/build && \
  ../bootstrap --prefix=/usr && make && make install && ldconfig && \
  rm -rf /tmp/build
 
+# create user gpadmin since HAWQ cannot run under root
+RUN groupadd -g 1000 gpadmin && \
+ useradd -u 1000 -g 1000 gpadmin && \
+ echo "gpadmin  ALL=(ALL)       NOPASSWD: ALL" > /etc/sudoers.d/gpadmin
+
+# sudo should not require tty
+RUN sed -i -e 's|Defaults    requiretty|#Defaults    requiretty|' /etc/sudoers
+
 ENV BASEDIR /data
 RUN mkdir -p /data && chmod 777 /data
 
-WORKDIR /data
+USER gpadmin
 
+# setup ssh client keys for gpadmin
+RUN ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa && \
+ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && \
+ chmod 0600 ~/.ssh/authorized_keys
+
+WORKDIR /data
