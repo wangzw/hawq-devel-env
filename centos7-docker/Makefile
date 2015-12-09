@@ -29,7 +29,8 @@ all:
 	@echo "    To remove devel container:                     make remove-devel"
 	@echo ""
 	@echo "    To remove data container:                      make remove-data"
-	@echo "    To build imanges locally:                      make build"
+	@echo "    To build images locally:                       make build"
+	@echo "    To pull latest images:                         make pull"
 
 build:
 	@make -f $(THIS_MAKEFILE_PATH) build-hawq-devel-$(OS_VERSION)
@@ -214,6 +215,11 @@ remove-devel:
 	else \
 		echo "${CLUSTER_ID}devel container does not exist!"; \
 	fi
+
+pull:
+	@echo latest images
+	docker pull mayjojo/hawq-devel:$(OS_VERSION)
+	docker pull mayjojo/hawq-test:$(OS_VERSION)
 
 clean:
 	@make -f $(THIS_MAKEFILE_PATH) stop 2>&1 >/dev/null || true
