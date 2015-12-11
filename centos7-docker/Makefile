@@ -67,8 +67,8 @@ create-devel:
 	@make -f $(THIS_MAKEFILE_PATH) create-data-container 2>&1 >/dev/null
 	@echo create ${CLUSTER_ID}-devel container
 	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}-devel" | grep -v CONTAINER`" ]; then \
-		docker run -d --net=$(NETWORK) --hostname=${CLUSTER_ID}-devel --name=${CLUSTER_ID}-devel \
-		        --volumes-from ${CLUSTER_ID}-data mayjojo/hawq-devel:$(OS_VERSION) tail -f /dev/null; \
+		docker run -itd --net=$(NETWORK) --hostname=${CLUSTER_ID}-devel --name=${CLUSTER_ID}-devel \
+		        --volumes-from ${CLUSTER_ID}-data mayjojo/hawq-devel:$(OS_VERSION); \
 	else \
 		echo "${CLUSTER_ID}-devel container already exist!"; \
 	fi
@@ -99,8 +99,8 @@ run-hdfs:
 run-namenode-container:
 	@echo "run ${CLUSTER_ID}-namenode container"
 	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}-namenode" | grep -v CONTAINER`" ]; then \
-		docker run -d --net=$(NETWORK) --hostname=${CLUSTER_ID}-namenode --name=${CLUSTER_ID}-namenode \
-			--volumes-from ${CLUSTER_ID}-data mayjojo/hawq-test:$(OS_VERSION) tail -f /dev/null; \
+		docker run -itd --net=$(NETWORK) --hostname=${CLUSTER_ID}-namenode --name=${CLUSTER_ID}-namenode \
+			--volumes-from ${CLUSTER_ID}-data mayjojo/hawq-test:$(OS_VERSION); \
 	else \
 		echo "${CLUSTER_ID}-namenode container already exist!"; \
 	fi
@@ -108,9 +108,9 @@ run-namenode-container:
 run-datanode-container:
 	@echo "run ${CLUSTER_ID}-datanode$(CUR_DATANODE) container"
 	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}-datanode$(CUR_DATANODE)" | grep -v CONTAINER`" ]; then \
-		docker run -d --net=$(NETWORK) --hostname=${CLUSTER_ID}-datanode$(CUR_DATANODE) \
+		docker run -itd --net=$(NETWORK) --hostname=${CLUSTER_ID}-datanode$(CUR_DATANODE) \
 			--name=${CLUSTER_ID}-datanode$(CUR_DATANODE) -e NAMENODE=${CLUSTER_ID}-namenode \
-		  --volumes-from ${CLUSTER_ID}-data mayjojo/hawq-test:$(OS_VERSION) tail -f /dev/null; \
+		  --volumes-from ${CLUSTER_ID}-data mayjojo/hawq-test:$(OS_VERSION); \
 	else \
 		echo "${CLUSTER_ID}-datanode$(CUR_DATANODE) container already exist!"; \
 	fi
