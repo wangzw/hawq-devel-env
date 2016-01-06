@@ -17,18 +17,12 @@ all:
 	@echo "    To setup a build and test environment:         make run"
 	@echo "    To start all containers:                       make start"
 	@echo "    To stop all containers:                        make stop"
-	@echo "    To remove hdfs and devel containers:           make remove"
 	@echo "    To remove all containers:                      make clean"
 	@echo ""
 	@echo "    To setup a hdfs cluster:                       make run-hdfs"
 	@echo "    To start hdfs containers:                      make start-hdfs"
 	@echo "    To stop hdfs containers:                       make stop-hdfs"
 	@echo "    To remove hdfs containers:                     make remove-hdfs"
-	@echo ""
-	@echo "    To setup a devel container:                    make run-devel"
-	@echo "    To start a devel container:                    make start-devel"
-	@echo "    To stop a devel container:                     make stop-devel"
-	@echo "    To remove devel container:                     make remove-devel"
 	@echo ""
 	@echo "    To remove data container:                      make remove-data"
 	@echo "    To build images locally:                       make build"
@@ -63,20 +57,9 @@ create-data-container:
 		echo "${CLUSTER_ID}-data container already exist!"; \
 	fi
 
-create-devel:
-	@make -f $(THIS_MAKEFILE_PATH) create-data-container 2>&1 >/dev/null
-	@echo create ${CLUSTER_ID}-devel container
-	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}-devel" | grep -v CONTAINER`" ]; then \
-		docker run -itd --net=$(NETWORK) --hostname=${CLUSTER_ID}-devel --name=${CLUSTER_ID}-devel \
-		        --volumes-from ${CLUSTER_ID}-data mayjojo/hawq-devel:$(OS_VERSION); \
-	else \
-		echo "${CLUSTER_ID}-devel container already exist!"; \
-	fi
-
 run:
 	@if [ -z "`docker network ls 2>/dev/null`" ]; then \
                 make -f $(THIS_MAKEFILE_PATH) NETWORK=default create-data-container && \
-                make -f $(THIS_MAKEFILE_PATH) NETWORK=default create-devel && \
                 make -f $(THIS_MAKEFILE_PATH) NETWORK=default run-hdfs; \
 	else \
 	        if [ -z "`docker network ls 2>/dev/null | grep $(NETWORK)`" ]; then \
@@ -84,7 +67,6 @@ run:
 	                docker network create --driver bridge $(NETWORK); \
 	        fi && \
 	        make -f $(THIS_MAKEFILE_PATH) create-data-container && \
-                make -f $(THIS_MAKEFILE_PATH) create-devel && \
                 make -f $(THIS_MAKEFILE_PATH) run-hdfs; \
 	fi
 
@@ -94,7 +76,7 @@ run-hdfs:
 		make -f $(THIS_MAKEFILE_PATH) CUR_DATANODE=$$i run-datanode-container; \
 	done
 	@echo "Done!"
-	@echo 'run "docker exec -it ${CLUSTER_ID}-devel bash" to attach to ${CLUSTER_ID}-devel node'
+	@echo 'run "docker exec -it ${CLUSTER_ID}-namenode bash" to attach to ${CLUSTER_ID}-namenode node'
 
 run-namenode-container:
 	@echo "run ${CLUSTER_ID}-namenode container"
@@ -116,9 +98,8 @@ run-datanode-container:
 	fi
 
 start:
-	@make -f $(THIS_MAKEFILE_PATH) start-devel
 	@make -f $(THIS_MAKEFILE_PATH) start-hdfs
-	@echo 'run "docker exec -it ${CLUSTER_ID}-devel bash" to attach to ${CLUSTER_ID}-devel node'
+	@echo 'run "docker exec -it ${CLUSTER_ID}-namenode bash" to attach to ${CLUSTER_ID}-namenode node'
 
 start-hdfs:
 	@make -f $(THIS_MAKEFILE_PATH) start-namenode-container
@@ -143,16 +124,7 @@ start-datanode-container:
 		echo "${CLUSTER_ID}-datanode$(CUR_DATANODE) container does not exist!" && exit 1; \
 	fi
 
-start-devel:
-	@echo "start ${CLUSTER_ID}-devel container"
-	@if [ ! -z "`docker ps -a --filter="name=${CLUSTER_ID}-devel" | grep -v CONTAINER`" ]; then \
-		docker start ${CLUSTER_ID}-devel; \
-	else \
-		echo "${CLUSTER_ID}-devel container does not exist!" && exit 1; \
-	fi
-
 stop:
-	@make -f $(THIS_MAKEFILE_PATH) stop-devel
 	@make -f $(THIS_MAKEFILE_PATH) stop-hdfs
 
 stop-hdfs:
@@ -177,18 +149,6 @@ stop-datanode-container:
 	else \
 		echo "${CLUSTER_ID}-datanode$(CUR_DATANODE) container does not exist!"; \
 	fi
-
-stop-devel:
-	@echo "stop ${CLUSTER_ID}-devel container"
-	@if [ ! -z "`docker ps -a --filter="name=${CLUSTER_ID}-devel" | grep -v CONTAINER`" ]; then \
-		docker stop -t 0 ${CLUSTER_ID}-devel; \
-	else \
-		echo "${CLUSTER_ID}-devel container does not exist!"; \
-	fi
-
-remove:
-	@make -f $(THIS_MAKEFILE_PATH) remove-devel
-	@make -f $(THIS_MAKEFILE_PATH) remove-hdfs
 
 remove-hdfs:
 	@make -f $(THIS_MAKEFILE_PATH) remove-namenode-container
@@ -221,14 +181,6 @@ remove-data:
 		echo "${CLUSTER_ID}-data container does not exist!"; \
 	fi
 
-remove-devel:
-	@echo remove ${CLUSTER_ID}-devel container
-	@if [ ! -z "`docker ps -a --filter="name=${CLUSTER_ID}-devel" | grep -v CONTAINER`" ]; then \
-		docker rm ${CLUSTER_ID}-devel; \
-	else \
-		echo "${CLUSTER_ID}-devel container does not exist!"; \
-	fi
-
 pull:
 	@echo latest images
 	docker pull mayjojo/hawq-devel:$(OS_VERSION)
@@ -236,7 +188,7 @@ pull:
 
 clean:
 	@make -f $(THIS_MAKEFILE_PATH) stop 2>&1 >/dev/null || true
-	@make -f $(THIS_MAKEFILE_PATH) remove 2>&1 >/dev/null || true
+	@make -f $(THIS_MAKEFILE_PATH) remove-hdfs 2>&1 >/dev/null || true
 	@make -f $(THIS_MAKEFILE_PATH) remove-data 2>&1 >/dev/null || true
 	@if [ ! -z "`docker network ls 2>/dev/null | grep $(NETWORK)`" ]; then \
 	        echo remove network $(NETWORK); \
