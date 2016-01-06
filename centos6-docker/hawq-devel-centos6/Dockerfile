@@ -77,6 +77,14 @@ RUN mkdir -p /tmp/build && \
  ../bootstrap --prefix=/usr && make && make install && ldconfig && \
  rm -rf /tmp/build
 
+# install python module 
+RUN yum makecache && yum install -y postgresql-devel && \
+ pip --retries=50 --timeout=300 install pg8000 simplejson unittest2 pycrypto pygresql pyyaml lockfile paramiko psi && \
+ pip --retries=50 --timeout=300 install http://darcs.idyll.org/~t/projects/figleaf-0.6.1.tar.gz && \
+ pip --retries=50 --timeout=300 install http://sourceforge.net/projects/pychecker/files/pychecker/0.8.19/pychecker-0.8.19.tar.gz/download && \
+ yum erase -y postgresql postgresql-libs postgresql-devel && \
+ yum clean all
+
 # install libyarn
 RUN mkdir -p /tmp/build && \
  cd /tmp/build && git clone --depth=1 https://github.com/apache/incubator-hawq.git . && cd depends/libyarn && mkdir build && cd build && \
@@ -91,9 +99,12 @@ RUN groupadd -g 1000 gpadmin && \
 # sudo should not require tty
 RUN sed -i -e 's|Defaults    requiretty|#Defaults    requiretty|' /etc/sudoers
 
+RUN echo "#!/bin/bash" > /etc/profile.d/user.sh && \
+ echo "export USER=\`whoami\`" >> /etc/profile.d/user.sh && \
+ chmod a+x /etc/profile.d/user.sh
+
 ENV BASEDIR /data
 RUN mkdir -p /data && chmod 777 /data
-
 
 USER gpadmin
 
