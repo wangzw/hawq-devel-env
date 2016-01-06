@@ -14,6 +14,10 @@ RUN ln -s /usr/hdp/current/hadoop-hdfs-namenode/../hadoop/sbin/hadoop-daemon.sh 
 COPY conf/* /etc/hadoop/conf/
 
 COPY entrypoint.sh /usr/bin/entrypoint.sh
+COPY start-hdfs.sh /usr/bin/start-hdfs.sh
+
+USER gpadmin
+
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["bash"]
 
