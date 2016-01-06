@@ -10,9 +10,6 @@ RUN curl -L "http://public-repo-1.hortonworks.com/HDP/centos7/2.x/updates/2.3.2.
  yum clean all
 
 RUN ln -s /usr/hdp/current/hadoop-hdfs-namenode/../hadoop/sbin/hadoop-daemon.sh /usr/bin/hadoop-daemon.sh
-RUN echo "#!/bin/bash" > /etc/profile.d/user.sh && \
- echo "export USER=\`whoami\`" >> /etc/profile.d/user.sh && \
- chmod a+x /etc/profile.d/user.sh
 
 COPY conf/* /etc/hadoop/conf/
 
