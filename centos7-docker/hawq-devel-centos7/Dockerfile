@@ -39,6 +39,9 @@ RUN mkdir -p /tmp/build && \
  ../bootstrap --prefix=/usr && make && make install && ldconfig && \
  rm -rf /tmp/build
 
+# install python module 
+pip install pg8000 simplejson unittest2 pycrypto pygresql pyyaml lockfile paramiko psi figleaf pychecker
+
 # create user gpadmin since HAWQ cannot run under root
 RUN groupadd -g 1000 gpadmin && \
  useradd -u 1000 -g 1000 gpadmin && \
