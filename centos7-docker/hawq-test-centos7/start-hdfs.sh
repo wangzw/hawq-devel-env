@@ -2,6 +2,10 @@
 
 /usr/sbin/sshd
 
+if [ -f /etc/profile.d/hadoop.sh ]; then
+  . /etc/profile.d/hadoop.sh
+fi
+
 if [ "${NAMENODE}" == "${HOSTNAME}" ]; then
   if [ ! -d /tmp/hdfs/name/current ]; then
     su -l hdfs -c "hdfs namenode -format"
