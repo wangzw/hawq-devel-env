@@ -9,7 +9,8 @@ RUN sed -i 's/tsflags=nodocs//g' /etc/yum.conf
 RUN curl -L "https://bintray.com/wangzw/rpm/rpm" -o /etc/yum.repos.d/bintray-wangzw-rpm.repo
 
 # install all software we need
-RUN yum install -y epel-release && \
+RUN yum -y swap -- remove systemd-container systemd-container-libs -- install systemd systemd-libs && \
+ yum install -y epel-release && \
  yum makecache && \
  yum install -y man passwd sudo tar which git mlocate links make bzip2 \
  autoconf automake libtool m4 gcc gcc-c++ gdb bison flex cmake gperf maven indent \
