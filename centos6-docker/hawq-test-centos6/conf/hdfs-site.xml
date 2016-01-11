@@ -92,4 +92,9 @@
 			If "false", no access tokens are checked on accessing datanodes.
 		</description>
 	</property>
+
+	<property>
+		<name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+		<value>false</value>
+	</property>
 </configuration>
