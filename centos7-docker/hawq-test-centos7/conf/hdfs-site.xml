@@ -80,7 +80,7 @@
 
 	<property>
 		<name>dfs.domain.socket.path</name>
-		<value>/var/lib/hadoop-hdfs/hdfs_domain__PORT</value>
+		<value>/var/lib/hadoop-hdfs/dn_socket</value>
 	</property>
 
 	<property>
