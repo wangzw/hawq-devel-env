@@ -18,7 +18,7 @@ git clone https://github.com/wangzw/hawq-devel-env.git .
 cd centos7-docker
 make run
 ```
-An example output is as following
+An example output looks like as following
 ```
 [root@centos70-vm1 centos7-docker]# make run
 make[1]: Entering directory `/root/hawq-devel-env/centos7-docker'
@@ -56,7 +56,7 @@ CONTAINER ID        IMAGE                        COMMAND                CREATED 
 470dff42a2e0        mayjojo/hawq-test:centos7    "entrypoint.sh bash"   2 minutes ago       Up 2 minutes                            centos7-namenode
 b5986bc9403a        mayjojo/hawq-devel:centos7   "/bin/true"            36 minutes ago      Created                                 centos7-data
 ```
-**centos7-data** is a data container and mounted to other containers to provide a shared storage for the cluster.
+**centos7-data** is a data container and mounted to /data directory on all other containers to provide a shared storage for the cluster. 
 
 # Build and Test Apache HAWQ
 * attach to namenode
@@ -67,7 +67,7 @@ docker exec -it centos7-namenode bash
 ```
 sudo -u hdfs hdfs dfsadmin -report
 ```
-A sample output should like following
+A sample output should look like as following
 ```
 [gpadmin@centos7-namenode data]$ sudo -u hdfs hdfs dfsadmin -report
 Configured Capacity: 321962115072 (299.85 GB)
@@ -155,7 +155,7 @@ echo 'centos7-datanode1' >  /data/hawq-devel/etc/slaves
 echo 'centos7-datanode2' >>  /data/hawq-devel/etc/slaves
 echo 'centos7-datanode3' >>  /data/hawq-devel/etc/slaves
 ```
-* Initialize Apache HAWQ cluster and create default databse
+* Initialize Apache HAWQ cluster and create default database
 ```
 source /data/hawq-devel/greenplum_path.sh
 hawq init cluster
