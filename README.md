@@ -181,12 +181,7 @@ make installcheck-good
     To setup a build and test environment:         make run
     To start all containers:                       make start
     To stop all containers:                        make stop
-    To remove all containers:                      make clean
-
-    To setup a hdfs cluster:                       make run-hdfs
-    To start hdfs containers:                      make start-hdfs
-    To stop hdfs containers:                       make stop-hdfs
-    To remove hdfs containers:                     make remove-hdfs
+    To remove hdfs containers:                     make clean
 
     To remove data container:                      make remove-data
     To build images locally:                       make build
