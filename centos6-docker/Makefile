@@ -17,12 +17,7 @@ all:
 	@echo "    To setup a build and test environment:         make run"
 	@echo "    To start all containers:                       make start"
 	@echo "    To stop all containers:                        make stop"
-	@echo "    To remove all containers:                      make clean"
-	@echo ""
-	@echo "    To setup a hdfs cluster:                       make run-hdfs"
-	@echo "    To start hdfs containers:                      make start-hdfs"
-	@echo "    To stop hdfs containers:                       make stop-hdfs"
-	@echo "    To remove hdfs containers:                     make remove-hdfs"
+	@echo "    To remove hdfs containers:                     make clean"
 	@echo ""
 	@echo "    To remove data container:                      make remove-data"
 	@echo "    To build images locally:                       make build"
@@ -189,7 +184,6 @@ pull:
 clean:
 	@make -f $(THIS_MAKEFILE_PATH) stop 2>&1 >/dev/null || true
 	@make -f $(THIS_MAKEFILE_PATH) remove-hdfs 2>&1 >/dev/null || true
-	@make -f $(THIS_MAKEFILE_PATH) remove-data 2>&1 >/dev/null || true
 	@if [ ! -z "`docker network ls 2>/dev/null | grep $(NETWORK)`" ]; then \
 	        echo remove network $(NETWORK); \
 	        docker network rm $(NETWORK) 2>&1 >/dev/null || true; \
