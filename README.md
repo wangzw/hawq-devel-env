@@ -8,6 +8,20 @@ We currently support CentOS 6 and CentOS 7, the usage for different platform is 
 * following the instructions to install docker.
 https://docs.docker.com/
 
+# Setup docker-machine on OSX (optional)
+```
+# figure out any existing virtual machine, say 'dev'
+docker-machine ls
+
+# start the vm called 'dev'
+docker-machine start dev
+
+# set up the environment using 'dev'
+eval "$(docker-machine env dev)"
+```
+
+For details, please check https://docs.docker.com/machine/get-started/
+
 # Setup build and test environment
 * clone this repository
 ```
