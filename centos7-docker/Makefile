@@ -67,8 +67,10 @@ run:
 
 run-hdfs:
 	@make -f $(THIS_MAKEFILE_PATH) run-namenode-container
-	@for (( i=1; i<=$(NDATANODES); ++i )); do \
+	@i=1; \
+	while [ $$i -le $(NDATANODES) ] ; do \
 		make -f $(THIS_MAKEFILE_PATH) CUR_DATANODE=$$i run-datanode-container; \
+		i=$$((i+1)); \
 	done
 	@echo "Done!"
 	@echo 'run "docker exec -it ${CLUSTER_ID}-namenode bash" to attach to ${CLUSTER_ID}-namenode node'
@@ -98,8 +100,10 @@ start:
 
 start-hdfs:
 	@make -f $(THIS_MAKEFILE_PATH) start-namenode-container
-	@for (( i=1; i<=$(NDATANODES); ++i )); do \
+	@i=1;\
+	while [ $$i -le $(NDATANODES) ] ; do \
 		make -f $(THIS_MAKEFILE_PATH) CUR_DATANODE=$$i start-datanode-container; \
+		i=$$((i+1)); \
 	done
 	@echo "Done!"
 
@@ -124,8 +128,10 @@ stop:
 
 stop-hdfs:
 	@make -f $(THIS_MAKEFILE_PATH) stop-namenode-container
-	@for (( i=1; i<=$(NDATANODES); ++i )); do \
+	@i=1; \
+	while [ $$i -le $(NDATANODES) ] ; do \
 		make -f $(THIS_MAKEFILE_PATH) CUR_DATANODE=$$i stop-datanode-container; \
+		i=$$((i+1)); \
 	done
 	@echo "Done!"
 
@@ -147,8 +153,10 @@ stop-datanode-container:
 
 remove-hdfs:
 	@make -f $(THIS_MAKEFILE_PATH) remove-namenode-container
-	@for (( i=1; i<=$(NDATANODES); ++i )); do \
+	@i=1; \
+	while [ $$i -le $(NDATANODES) ] ; do \
 		make -f $(THIS_MAKEFILE_PATH) CUR_DATANODE=$$i remove-datanode-container; \
+		i=$$((i+1)); \
 	done
 	@echo "Done!"
 
