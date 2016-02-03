@@ -18,8 +18,8 @@ all:
 	@echo "    To start all containers:                       make start"
 	@echo "    To stop all containers:                        make stop"
 	@echo "    To remove hdfs containers:                     make clean"
+	@echo "    To remove all containers:                      make distclean"
 	@echo ""
-	@echo "    To remove data container:                      make remove-data"
 	@echo "    To build images locally:                       make build"
 	@echo "    To pull latest images:                         make pull"
 
@@ -192,6 +192,12 @@ pull:
 clean:
 	@make -f $(THIS_MAKEFILE_PATH) stop 2>&1 >/dev/null || true
 	@make -f $(THIS_MAKEFILE_PATH) remove-hdfs 2>&1 >/dev/null || true
+	@echo "Done!"
+
+distclean:
+	@make -f $(THIS_MAKEFILE_PATH) stop 2>&1 >/dev/null || true
+	@make -f $(THIS_MAKEFILE_PATH) remove-hdfs 2>&1 >/dev/null || true
+	@make -f $(THIS_MAKEFILE_PATH) remove-data 2>&1 >/dev/null || true
 	@if [ ! -z "`docker network ls 2>/dev/null | grep $(NETWORK)`" ]; then \
 	        echo remove network $(NETWORK); \
 	        docker network rm $(NETWORK) 2>&1 >/dev/null || true; \

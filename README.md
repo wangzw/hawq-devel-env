@@ -190,14 +190,12 @@ make installcheck-good
 ```
 # More command with this script
 ```
-[root@centos70-vm1 centos7-docker]# make
  Usage:
     To setup a build and test environment:         make run
     To start all containers:                       make start
     To stop all containers:                        make stop
     To remove hdfs containers:                     make clean
-
-    To remove data container:                      make remove-data
+    To remove all containers:                      make distclean
     To build images locally:                       make build
     To pull latest images:                         make pull
 ```
