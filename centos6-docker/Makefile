@@ -42,7 +42,7 @@ create-data-container:
 		echo "LOCAL must be set to a directory!"; \
 		exit 1; \
 	fi
-	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}-data" | grep -v CONTAINER`" ]; then \
+	@if [ -z "`docker ps -a --filter="name=${CLUSTER_ID}-data$$" | grep -v CONTAINER`" ]; then \
 		if [ -z "$(LOCAL)" ]; then \
 			docker create -v /data --name=${CLUSTER_ID}-data mayjojo/hawq-devel:$(OS_VERSION) /bin/true; \
 		else \
