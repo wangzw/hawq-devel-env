@@ -173,8 +173,8 @@ echo 'centos7-datanode3' >>  /data/hawq-devel/etc/slaves
 * Initialize Apache HAWQ cluster and create default database
 ```
 sudo chmod +x /data/hawq-devel/greenplum_path.sh
-sudo chmod 777 ls
-/data/hawq-devel/etc
+# This next command is not safe, but it's okay for a toy environment, for now.
+sudo chmod 777 /data/hawq-devel/etc
 sudo /data/hawq-devel/greenplum_path.sh && hawq init cluster
 createdb
 ```
