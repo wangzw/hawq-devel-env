@@ -158,6 +158,7 @@ git clone https://github.com/apache/incubator-hawq.git /data/hawq
 * build Apache HAWQ
 ```
 cd /data/hawq
+sudo cpan JSON  # Choose the sudo install method and accept the defaults for everything else.
 ./configure --prefix=/data/hawq-devel
 make
 make install
