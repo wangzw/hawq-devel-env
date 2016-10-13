@@ -158,9 +158,10 @@ git clone https://github.com/apache/incubator-hawq.git /data/hawq
 * build Apache HAWQ
 ```
 cd /data/hawq
+sudo cpan JSON  # Choose the sudo install method and accept the defaults for everything else.
 ./configure --prefix=/data/hawq-devel
-make
-make install
+sudo make
+sudo make install
 ```
 * modify Apache HAWQ configuration
 ```
@@ -171,8 +172,10 @@ echo 'centos7-datanode3' >>  /data/hawq-devel/etc/slaves
 ```
 * Initialize Apache HAWQ cluster and create default database
 ```
-source /data/hawq-devel/greenplum_path.sh
-hawq init cluster
+sudo chmod +x /data/hawq-devel/greenplum_path.sh
+# This next command is not safe, but it's okay for a toy environment, for now.
+sudo chmod 777 /data/hawq-devel/etc
+sudo /data/hawq-devel/greenplum_path.sh && hawq init cluster
 createdb
 ```
 Now you can connect to default database with `psql` command.
@@ -186,7 +189,7 @@ gpadmin=#
 * Running tests
 ```
 cd /data/hawq
-make installcheck-good
+sudo ../hawq-devel/greenplum_path.sh && make installcheck-good
 ```
 # More command with this script
 ```
